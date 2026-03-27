@@ -10,6 +10,7 @@ interface FamilyMember {
   status: 'affected' | 'unaffected' | 'carrier' | 'unknown';
   health_status?: string;
   medicalNotes?: string;
+  side_of_family?: string;
 }
 
 interface Patient {

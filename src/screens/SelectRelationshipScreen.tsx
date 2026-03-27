@@ -26,8 +26,19 @@ export default function SelectRelationshipScreen() {
   ];
 
   const handleNext = () => {
-    setTempMemberData({ ...tempMemberData, relationship: selected });
-    navigate('/select-status');
+    const sideRequired = ['grandfather', 'grandmother', 'uncle', 'aunt', 'cousin'].includes(selected);
+    
+    setTempMemberData({ 
+      ...tempMemberData, 
+      relationship: selected,
+      side_of_family: sideRequired ? (tempMemberData.side_of_family || '') : 'None'
+    });
+    
+    if (sideRequired) {
+      navigate('/select-side');
+    } else {
+      navigate('/select-status');
+    }
   };
 
   return (

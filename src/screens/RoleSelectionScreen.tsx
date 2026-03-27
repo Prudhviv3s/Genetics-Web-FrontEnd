@@ -16,6 +16,9 @@ export default function RoleSelectionScreen() {
     setSelectedRole(role);
     setUserRole(role);
     
+    // Persist the selected role to ensure it's available after navigation/refresh
+    sessionStorage.setItem('selectedRole', role);
+    
     // Immediately navigate based on the action parameter
     if (action === 'signin') {
       navigate('/login');
@@ -24,13 +27,14 @@ export default function RoleSelectionScreen() {
     }
   };
 
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center p-6">
       <div className="w-full max-w-5xl">
         {/* Logo */}
         <div className="flex items-center justify-center gap-3 mb-8">
-          <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center">
-            <GitBranch className="text-white" size={32} />
+          <div className="w-16 h-16 flex items-center justify-center">
+            <img src="/src/assets/logo.png" alt="Logo" className="w-full h-full object-contain" />
           </div>
           <span className="text-3xl font-bold text-gray-900">Genetics</span>
         </div>

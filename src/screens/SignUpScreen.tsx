@@ -40,8 +40,13 @@ export default function SignUpScreen() {
   };
 
   const handleSignUp = () => {
+    if (formData.phone.length !== 10 || !/^\d+$/.test(formData.phone)) {
+      alert("Phone number must be exactly 10 digits");
+      return;
+    }
     navigate('/otp-verification');
   };
+
 
   return (
     <MobileContainer>
@@ -99,8 +104,14 @@ export default function SignUpScreen() {
               <input
                 type="tel"
                 value={formData.phone}
-                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                placeholder="+1 (555) 123-4567"
+                onChange={(e) => {
+                  const value = e.target.value.replace(/\D/g, '');
+                  if (value.length <= 10) {
+                    setFormData({ ...formData, phone: value });
+                  }
+                }}
+                maxLength={10}
+                placeholder="10-digit phone number"
                 className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>

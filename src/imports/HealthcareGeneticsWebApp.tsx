@@ -633,9 +633,9 @@ function GitBranch() {
 
 function Container27() {
   return (
-    <div className="relative rounded-[10px] shrink-0 size-[40px]" data-name="Container" style={{ backgroundImage: "linear-gradient(135deg, rgb(21, 93, 252) 0%, rgb(152, 16, 250) 100%)" }}>
+    <div className="relative shrink-0 size-[40px]" data-name="Container">
       <div className="bg-clip-padding border-0 border-[transparent] border-solid content-stretch flex items-center justify-center relative size-full">
-        <GitBranch />
+        <img src="/src/assets/logo.png" alt="Logo" className="w-full h-full object-contain" />
       </div>
     </div>
   );

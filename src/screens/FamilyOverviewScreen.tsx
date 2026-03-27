@@ -23,10 +23,11 @@ interface FamilyMemberCardProps {
   status: 'affected' | 'unaffected' | 'carrier' | 'unknown';
   gender: string;
   age: number;
+  side_of_family?: string;
   onDelete: (id: string) => void;
 }
 
-function FamilyMemberCard({ id, name, relationship, status, gender, age, onDelete }: FamilyMemberCardProps) {
+function FamilyMemberCard({ id, name, relationship, status, gender, age, side_of_family, onDelete }: FamilyMemberCardProps) {
   const navigate = useNavigate();
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   
@@ -68,7 +69,9 @@ function FamilyMemberCard({ id, name, relationship, status, gender, age, onDelet
             </div>
             <div className="flex-1">
               <div className="font-semibold text-gray-900">{name}</div>
-              <div className="text-sm text-gray-600">{relationship} • {age} years</div>
+              <div className="text-sm text-gray-600">
+                {relationship}{side_of_family && side_of_family !== 'None' ? ` - ${side_of_family}` : ''} • {age} years
+              </div>
             </div>
             <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor()} capitalize`}>
               {status}

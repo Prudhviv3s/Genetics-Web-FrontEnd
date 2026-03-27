@@ -37,6 +37,16 @@ export default function LoginPage() {
       const data = await response.json();
 
       if (response.ok && data.token) {
+        const backendRole = data.role ? data.role.toLowerCase() : null;
+        const selectedRole = sessionStorage.getItem('selectedRole');
+
+        // Role Validation: Check if the backend role matches the portal the user is logging into
+        if (selectedRole && backendRole && selectedRole !== backendRole) {
+          setError(`This account is registered as a ${backendRole}. Please sign in through the correct portal.`);
+          setIsLoading(false);
+          return;
+        }
+
         // Save token to localStorage
         localStorage.setItem('token', data.token);
 
@@ -44,18 +54,18 @@ export default function LoginPage() {
         await refreshGlobalData();
 
         // Save user role and navigate
-        if (data.role) {
-          localStorage.setItem('userRole', data.role.toLowerCase());
+        if (backendRole) {
+          localStorage.setItem('userRole', backendRole);
 
-          const role = data.role.toLowerCase();
-          if (role === 'patient') {
+          if (backendRole === 'patient') {
             navigate('/patient-dashboard');
-          } else if (role === 'doctor') {
+          } else if (backendRole === 'doctor') {
             navigate('/doctor-home');
           } else {
             navigate('/role-selection');
           }
         } else {
+
           // Fallback if role is not returned but context has one
           if (userRole === 'patient') {
             navigate('/patient-dashboard');
@@ -89,8 +99,8 @@ export default function LoginPage() {
         <div className="hidden lg:block">
           <div className="bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl p-12 text-white">
             <div className="flex items-center gap-3 mb-8">
-              <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center">
-                <GitBranch size={28} />
+              <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center">
+                <img src="/src/assets/logo.png" alt="Logo" className="w-10 h-10 object-contain" />
               </div>
               <span className="text-2xl font-bold">Genetics</span>
             </div>
@@ -133,8 +143,8 @@ export default function LoginPage() {
         {/* Right Side - Login Form */}
         <div className="bg-white rounded-2xl shadow-xl p-8 lg:p-12">
           <div className="lg:hidden flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-              <GitBranch className="text-white" size={24} />
+            <div className="w-10 h-10 flex items-center justify-center">
+              <img src="/src/assets/logo.png" alt="Logo" className="w-full h-full object-contain" />
             </div>
             <span className="text-xl font-bold text-gray-900">Genetics</span>
           </div>

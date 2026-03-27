@@ -10,7 +10,7 @@ export default function RandomScreenButton() {
     '/landing', '/role-selection', '/login', '/signup', '/forgot-password', '/home',
     '/patient-dashboard', '/patient-profile', '/edit-profile', '/family-overview',
     '/add-family-member', '/pedigree-builder', '/patient-results',
-    '/select-relationship', '/select-status', '/medical-notes', '/pedigree-builder',
+    '/select-relationship', '/select-status', '/pedigree-builder',
     '/edit-family-member/1', '/delete-confirmation/1', '/save-pedigree',
     '/update-pedigree', '/version-history', '/compare-changes', '/submit-pedigree',
     '/doctor-dashboard', '/doctor-patients', '/patient-detail/p1', '/visual-analysis', '/inheritance-detection',

@@ -1,5 +1,6 @@
 import React from 'react';
 import { GitBranch } from 'lucide-react';
+import logo from '../assets/logo.png';
 
 export default function SplashScreen() {
   return (
@@ -7,10 +8,9 @@ export default function SplashScreen() {
       <div className="text-center">
         <div className="mb-8 flex justify-center">
           <div className="relative">
-            <div className="w-32 h-32 bg-white/20 rounded-2xl flex items-center justify-center animate-pulse">
-              <GitBranch size={64} className="text-white" />
+            <div className="w-32 h-32 bg-white rounded-2xl flex items-center justify-center shadow-lg">
+              <img src={logo} alt="Genetics Logo" className="w-24 h-24 object-contain" />
             </div>
-            <div className="absolute inset-0 bg-white opacity-10 rounded-2xl blur-2xl"></div>
           </div>
         </div>
         <h1 className="text-4xl font-bold text-white mb-4">

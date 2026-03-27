@@ -98,7 +98,7 @@ export default function PatientDashboard() {
             onClick={() => navigate('/pedigree-builder')}
             className="bg-white border-2 border-gray-200 rounded-xl p-6 flex items-center gap-4 hover:border-blue-600 hover:shadow-md transition-all"
           >
-            <GitBranch size={28} className="text-blue-600" />
+            <img src="/src/assets/logo.png" alt="Logo" className="w-7 h-7 object-contain" />
             <div className="flex-1 text-left">
               <div className="font-semibold text-lg text-gray-900">Pedigree Builder</div>
               <div className="text-sm text-gray-600 mt-1">Build your family tree</div>

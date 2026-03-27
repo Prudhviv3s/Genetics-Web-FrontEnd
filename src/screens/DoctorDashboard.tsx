@@ -6,7 +6,7 @@ import { API_BASE_URL } from '../config';
 
 export default function DoctorDashboard() {
   const navigate = useNavigate();
-  const [filter, setFilter] = useState('all');
+
   const [searchQuery, setSearchQuery] = useState('');
 
   const [patients, setPatients] = useState<any[]>([]);
@@ -47,8 +47,7 @@ export default function DoctorDashboard() {
   const filteredPatients = patients.filter(patient => {
     const matchesSearch = patient.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       patient.email.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesFilter = filter === 'all' || patient.status === filter;
-    return matchesSearch && matchesFilter;
+    return matchesSearch;
   });
 
   return (
@@ -66,20 +65,7 @@ export default function DoctorDashboard() {
             />
           </div>
 
-          <div className="flex gap-2">
-            {['All', 'Pending', 'Analyzed', 'Priority'].map((f) => (
-              <button
-                key={f}
-                onClick={() => setFilter(f.toLowerCase())}
-                className={`px-5 py-2.5 rounded-lg font-medium transition-all ${filter === f.toLowerCase()
-                  ? 'bg-blue-600 text-white shadow-sm'
-                  : 'bg-white border border-gray-300 text-gray-700 hover:border-blue-300'
-                  }`}
-              >
-                {f}
-              </button>
-            ))}
-          </div>
+
         </div>
 
         {loading ? (
@@ -97,12 +83,7 @@ export default function DoctorDashboard() {
                     <h3 className="font-semibold text-gray-900 text-lg">{patient.name}</h3>
                     <p className="text-sm text-gray-600 mt-1">{patient.email}</p>
                   </div>
-                  <span className={`px-3 py-1.5 text-xs font-medium rounded-full ${patient.status === 'analyzed' ? 'bg-green-100 text-green-700' :
-                    patient.status === 'priority' ? 'bg-red-100 text-red-700' :
-                      'bg-yellow-100 text-yellow-700'
-                    }`}>
-                    {patient.status.charAt(0).toUpperCase() + patient.status.slice(1)}
-                  </span>
+
                 </div>
                 <div className="flex gap-6 text-sm text-gray-500 mt-4 pt-4 border-t border-gray-100">
                   <span>Age: {patient.age}</span>

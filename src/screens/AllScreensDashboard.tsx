@@ -140,7 +140,6 @@ export default function AllScreensDashboard() {
     { id: 14, name: 'Add Family Member', route: '/add-family-member', description: 'Add new family member', icon: <Users className="w-5 h-5" />, category: 'Family Management', userRole: 'patient' },
     { id: 15, name: 'Select Relationship', route: '/select-relationship', description: 'Define family relationship', icon: <GitBranch className="w-5 h-5" />, category: 'Family Management', userRole: 'patient' },
     { id: 16, name: 'Select Status', route: '/select-status', description: 'Set health status', icon: <Activity className="w-5 h-5" />, category: 'Family Management', userRole: 'patient' },
-    { id: 17, name: 'Medical Notes', route: '/medical-notes', description: 'Add medical information', icon: <FileText className="w-5 h-5" />, category: 'Family Management', userRole: 'patient' },
     { id: 18, name: 'Pedigree Builder', route: '/pedigree-builder', description: 'Build family tree', icon: <GitBranch className="w-5 h-5" />, category: 'Family Management', userRole: 'patient' },
     { id: 19, name: 'Edit Family Member', route: '/edit-family-member/1', description: 'Modify member details', icon: <Users className="w-5 h-5" />, category: 'Family Management', userRole: 'patient' },
     { id: 20, name: 'Delete Confirmation', route: '/delete-confirmation/1', description: 'Confirm member deletion', icon: <Users className="w-5 h-5" />, category: 'Family Management', userRole: 'patient' },

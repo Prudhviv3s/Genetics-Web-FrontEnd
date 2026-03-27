@@ -49,6 +49,32 @@ export default function SignUpPage() {
     setError(null);
 
     // Basic validation
+    if (!/^[a-zA-Z\s]+$/.test(formData.fullName)) {
+      setError("Full name must only contain letters and spaces");
+      return;
+    }
+
+    if (!formData.email.match(/\.(com|in)$/i)) {
+      setError("Email must end with .com or .in");
+      return;
+    }
+
+    if (formData.phone.length !== 10 || !/^\d+$/.test(formData.phone)) {
+      setError("Phone number must be exactly 10 digits");
+      return;
+    }
+
+    // Password complexity check
+    const password = formData.password;
+    if (password.length < 8) {
+      setError("Password must be at least 8 characters long");
+      return;
+    }
+    if (!/[A-Z]/.test(password) || !/[a-z]/.test(password) || !/[0-9]/.test(password) || !/[!@#$%^&*()_\-+=\[{\]};:'",<.>/?\\|`~]/.test(password)) {
+      setError("Password must contain uppercase, lowercase, number, and special character");
+      return;
+    }
+
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match");
       return;
@@ -120,8 +146,8 @@ export default function SignUpPage() {
         {/* Left Side - Form */}
         <div className="bg-white rounded-2xl shadow-xl p-8 lg:p-12 max-h-[90vh] overflow-y-auto">
           <div className="lg:hidden flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-              <GitBranch className="text-white" size={24} />
+            <div className="w-10 h-10 flex items-center justify-center">
+              <img src="/src/assets/logo.png" alt="Logo" className="w-full h-full object-contain" />
             </div>
             <span className="text-xl font-bold text-gray-900">Genetics</span>
           </div>
@@ -181,8 +207,14 @@ export default function SignUpPage() {
                 <input
                   type="tel"
                   value={formData.phone}
-                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  placeholder="+1 (555) 123-4567"
+                  onChange={(e) => {
+                    const value = e.target.value.replace(/\D/g, '');
+                    if (value.length <= 10) {
+                      setFormData({ ...formData, phone: value });
+                    }
+                  }}
+                  placeholder="Enter 10-digit phone number"
+                  maxLength={10}
                   className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   required
                 />
@@ -331,8 +363,8 @@ export default function SignUpPage() {
         <div className="hidden lg:block">
           <div className="bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl p-12 text-white">
             <div className="flex items-center gap-3 mb-8">
-              <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center">
-                <GitBranch size={28} />
+              <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center">
+                <img src="/src/assets/logo.png" alt="Logo" className="w-10 h-10 object-contain" />
               </div>
               <span className="text-2xl font-bold">Genetics</span>
             </div>

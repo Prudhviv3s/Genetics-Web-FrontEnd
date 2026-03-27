@@ -105,8 +105,8 @@ export default function ResetPasswordScreen() {
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="flex items-center justify-center gap-3 mb-8">
-          <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center">
-            <GitBranch className="text-white" size={24} />
+          <div className="w-12 h-12 flex items-center justify-center">
+            <img src="/src/assets/logo.png" alt="Logo" className="w-full h-full object-contain" />
           </div>
           <span className="text-2xl font-bold text-gray-900">Genetics</span>
         </div>

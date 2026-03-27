@@ -78,6 +78,39 @@ export default function NotificationsScreen() {
     }
   };
 
+  const handleNotificationClick = async (notification: any) => {
+    // 1. Mark as read if unread
+    if (!notification.is_read) {
+      await handleMarkAsRead(notification.id);
+    }
+
+    // 2. Navigate based on data
+    const data = notification.data || {};
+    const screen = data.screen;
+
+    switch (screen) {
+      case 'patient_detail':
+        if (data.patient_id) navigate(`/patient-detail/${data.patient_id}`);
+        break;
+      case 'analysis_detail':
+        if (data.patient_id) navigate(`/inheritance-detection/${data.patient_id}`);
+        else navigate('/patient-results');
+        break;
+      case 'family_overview':
+        navigate('/family-overview');
+        break;
+      case 'my_results':
+        navigate('/patient-results');
+        break;
+      case 'pedigree-builder':
+        navigate('/pedigree-builder');
+        break;
+      default:
+        // No navigation for unknown screens
+        break;
+    }
+  };
+
   const getNotifUI = (type: string) => {
     switch (type.toLowerCase()) {
       case 'analysis':
@@ -90,6 +123,9 @@ export default function NotificationsScreen() {
         return { icon: Clock, color: 'orange' };
       case 'review':
         return { icon: AlertCircle, color: 'red' };
+      case 'general':
+      case 'info':
+        return { icon: Info, color: 'blue' };
       default:
         return { icon: Info, color: 'blue' };
     }
@@ -169,7 +205,7 @@ export default function NotificationsScreen() {
                   key={notification.id}
                   className={`bg-white rounded-xl border p-6 cursor-pointer transition-all ${!notification.is_read ? 'border-blue-300 shadow-md hover:shadow-lg' : 'border-gray-200 hover:border-blue-200 hover:shadow-md'
                     }`}
-                  onClick={() => !notification.is_read && handleMarkAsRead(notification.id)}
+                  onClick={() => handleNotificationClick(notification)}
                 >
                   <div className="flex gap-4">
                     <div className={`flex-shrink-0 w-14 h-14 rounded-xl flex items-center justify-center ${getColorClasses(color, 'bg')}`}>

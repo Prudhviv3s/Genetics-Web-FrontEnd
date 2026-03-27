@@ -1,26 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router';
-import { GitBranch } from 'lucide-react';
+import { GitBranch, Loader2 } from 'lucide-react';
 import { DesktopLayout } from '../components/DesktopLayout';
 import { API_BASE_URL } from '../config';
 import { FormalPedigreeChart, PedigreeNodeDef } from '../components/FormalPedigreeChart';
 
-// ── Resolve Patient ID from whichever field the backend uses ─────────────────
-function resolvePatientId(info: any): string {
-  if (!info) return '---';
-  const raw = info.patient_id ?? info.patientId ?? info.pt_id ?? info.idno ?? '';
-  if (!raw) {
-    const num = info.id ?? info.user_id ?? '';
-    return num ? `PT${String(num).padStart(4, '0')}` : '---';
-  }
-  return String(raw).replace(/^#/, '').toUpperCase();
-}
-
-// ── Main Screen ──────────────────────────────────────────────────────────────
-export default function VisualPedigreeAnalysisScreen() {
-  const navigate    = useNavigate();
-  const { patientId } = useParams();
-
+export default function PatientVisualAnalysisScreen() {
   const [loading, setLoading]         = useState(true);
   const [error, setError]             = useState(false);
   const [patientInfo, setPatientInfo] = useState<any>(null);
@@ -30,15 +14,23 @@ export default function VisualPedigreeAnalysisScreen() {
     const load = async () => {
       try {
         const token = localStorage.getItem('token');
-        if (!token || !patientId) return;
+        if (!token) return;
 
-        const res  = await fetch(`${API_BASE_URL}/api/doctor/patient/${patientId}/pedigree/`, {
+        // Fetch patient's own pedigree
+        const res  = await fetch(`${API_BASE_URL}/api/patient/pedigree/`, {
           headers: { Authorization: `Token ${token}` }
         });
         const data = await res.json();
 
         if (data.status && data.pedigree) {
-          setPatientInfo(data.patient);
+          // Fetch profile for header info
+          const profileRes = await fetch(`${API_BASE_URL}/api/me/`, {
+            headers: { Authorization: `Token ${token}` }
+          });
+          const profileData = await profileRes.json();
+          if (profileData.status) {
+            setPatientInfo(profileData.profile);
+          }
 
           const mappedNodes: PedigreeNodeDef[] = (data.pedigree.nodes as any[]).map(n => {
             const rawStatus = (n.health_status ?? '').toLowerCase();
@@ -51,7 +43,6 @@ export default function VisualPedigreeAnalysisScreen() {
               relationship: n.relationship ?? '',
               isProband:    !!(n.is_proband || n.relationship === 'Patient'),
               displayId:    '', // Managed by FormalPedigreeChart
-              side_of_family: n.side_of_family
             };
           });
 
@@ -60,45 +51,41 @@ export default function VisualPedigreeAnalysisScreen() {
           setError(true);
         }
       } catch (e) {
-        console.error('[Pedigree] fetch error:', e);
+        console.error('[Patient Pedigree] fetch error:', e);
         setError(true);
       } finally {
         setLoading(false);
       }
     };
     load();
-  }, [patientId]);
+  }, []);
 
-  // ── Early returns ────────────────────────────────────────────────────────
   if (loading) return (
-    <DesktopLayout title="Pedigree Analysis" defaultUserRole="doctor">
-      <div className="flex items-center justify-center min-h-[50vh] text-gray-400 text-lg">
-        Loading pedigree analysis…
+    <DesktopLayout title="My Pedigree Chart" defaultUserRole="patient">
+      <div className="flex flex-col items-center justify-center min-h-[50vh] text-gray-400">
+        <Loader2 className="w-8 h-8 animate-spin mb-4" />
+        <p className="text-lg">Loading your pedigree chart…</p>
       </div>
     </DesktopLayout>
   );
 
   if (error || !allNodes.length) return (
-    <DesktopLayout title="Pedigree Analysis" defaultUserRole="doctor">
+    <DesktopLayout title="My Pedigree Chart" defaultUserRole="patient">
       <div className="max-w-4xl mx-auto text-center py-20 bg-white rounded-xl border border-gray-200 shadow-sm mt-4">
         <GitBranch size={48} className="mx-auto text-gray-300 mb-4" />
-        <p className="text-gray-500 text-lg mb-6">Pedigree data not available for this patient</p>
-        <button onClick={() => navigate('/visual-analysis')}
-          className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
-          ← Back to Patient List
-        </button>
+        <p className="text-gray-500 text-lg mb-6">Pedigree data not available yet</p>
+        <p className="text-sm text-gray-400 mb-8">Please ensure you have added your family members in the Pedigree Builder.</p>
       </div>
     </DesktopLayout>
   );
 
   return (
-    <DesktopLayout title="Pedigree Analysis" defaultUserRole="doctor">
+    <DesktopLayout title="My Pedigree Chart" defaultUserRole="patient">
       <FormalPedigreeChart 
         nodes={allNodes} 
         patientName={patientInfo?.full_name} 
-        patientDisplayId={resolvePatientId(patientInfo)}
+        patientDisplayId={patientInfo?.patient_id || (patientInfo?.id ? `PT${String(patientInfo.id).padStart(4, '0')}` : '---')}
       />
     </DesktopLayout>
   );
 }
-

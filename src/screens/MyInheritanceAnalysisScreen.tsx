@@ -336,7 +336,7 @@ export default function MyInheritanceAnalysisScreen() {
           
           <div className="flex gap-4">
             <button
-              onClick={() => navigate('/pedigree-builder')}
+            onClick={() => navigate('/my-pedigree-chart')}
               className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl p-5 font-semibold hover:from-blue-700 hover:to-purple-700 transition-all shadow-md hover:shadow-lg text-lg"
             >
               View Pedigree Chart

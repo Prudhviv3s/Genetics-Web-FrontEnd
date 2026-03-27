@@ -11,8 +11,8 @@ export default function LandingPage() {
       <nav className="bg-white/80 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-              <GitBranch className="text-white" size={24} />
+            <div className="w-10 h-10 flex items-center justify-center">
+              <img src="/src/assets/logo.png" alt="Logo" className="w-full h-full object-contain" />
             </div>
             <span className="text-xl font-bold text-gray-900">Genetics</span>
           </div>
@@ -255,8 +255,8 @@ export default function LandingPage() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-                  <GitBranch className="text-white" size={20} />
+                <div className="w-8 h-8 flex items-center justify-center">
+                  <img src="/src/assets/logo.png" alt="Logo" className="w-full h-full object-contain" />
                 </div>
                 <span className="text-lg font-bold">Genetics</span>
               </div>

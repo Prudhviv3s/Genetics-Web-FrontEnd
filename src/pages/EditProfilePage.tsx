@@ -62,7 +62,20 @@ export default function EditProfilePage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!/^[a-zA-Z\s]+$/.test(formData.full_name)) {
+      alert("Full name must only contain letters and spaces");
+      return;
+    }
+    if (!formData.email.match(/\.(com|in)$/i)) {
+      alert("Email must end with .com or .in");
+      return;
+    }
+    if (formData.phone.length !== 10 || !/^\d+$/.test(formData.phone)) {
+      alert("Phone number must be exactly 10 digits");
+      return;
+    }
     try {
+
       const token = localStorage.getItem('token');
       // Calculate approximate age
       const birthDate = new Date(formData.dob);
@@ -169,9 +182,15 @@ export default function EditProfilePage() {
                     id="phone"
                     name="phone"
                     value={formData.phone}
-                    onChange={handleChange}
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/\D/g, '');
+                      if (value.length <= 10) {
+                        setFormData({ ...formData, phone: value });
+                      }
+                    }}
+                    maxLength={10}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Enter your phone number"
+                    placeholder="Enter 10-digit phone number"
                     required
                   />
                 </div>

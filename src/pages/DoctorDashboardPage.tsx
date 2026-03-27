@@ -8,7 +8,7 @@ export default function DoctorDashboardPage() {
   const navigate = useNavigate();
   const { userRole } = useAppContext();
   const [searchQuery, setSearchQuery] = React.useState('');
-  const [activeFilter, setActiveFilter] = React.useState('all');
+
   const [allPatients, setAllPatients] = React.useState<any[]>([]);
   const [isLoading, setIsLoading] = React.useState(true);
 
@@ -31,7 +31,7 @@ export default function DoctorDashboardPage() {
             email: p.email,
             age: p.age,
             gender: p.gender || 'Unknown',
-            status: 'pending' // Defaulting to pending as backend API might not have status here, or we can update later
+
           }));
           setAllPatients(mapped);
         }
@@ -44,29 +44,12 @@ export default function DoctorDashboardPage() {
     fetchPatients();
   }, []);
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'pending': return 'bg-yellow-100 text-yellow-700';
-      case 'analyzed': return 'bg-green-100 text-green-700';
-      case 'priority': return 'bg-red-100 text-red-700';
-      default: return 'bg-gray-100 text-gray-700';
-    };
-  };
 
-  const getStatusLabel = (status: string) => {
-    switch (status) {
-      case 'pending': return 'Pending';
-      case 'analyzed': return 'Analyzed';
-      case 'priority': return 'Priority';
-      default: return status;
-    };
-  };
 
   const filteredPatients = allPatients.filter(patient => {
     const matchesSearch = patient.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       patient.email.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesFilter = activeFilter === 'all' || patient.status === activeFilter;
-    return matchesSearch && matchesFilter;
+    return matchesSearch;
   });
 
   return (
@@ -100,45 +83,7 @@ export default function DoctorDashboardPage() {
           </div>
         </div>
 
-        {/* Filter Tabs */}
-        <div className="flex gap-3 mb-6">
-          <button
-            onClick={() => setActiveFilter('all')}
-            className={`px-6 py-2.5 rounded-lg font-medium transition-all ${activeFilter === 'all'
-              ? 'bg-blue-600 text-white shadow-md'
-              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-              }`}
-          >
-            All
-          </button>
-          <button
-            onClick={() => setActiveFilter('pending')}
-            className={`px-6 py-2.5 rounded-lg font-medium transition-all ${activeFilter === 'pending'
-              ? 'bg-blue-600 text-white shadow-md'
-              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-              }`}
-          >
-            Pending
-          </button>
-          <button
-            onClick={() => setActiveFilter('analyzed')}
-            className={`px-6 py-2.5 rounded-lg font-medium transition-all ${activeFilter === 'analyzed'
-              ? 'bg-blue-600 text-white shadow-md'
-              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-              }`}
-          >
-            Analyzed
-          </button>
-          <button
-            onClick={() => setActiveFilter('priority')}
-            className={`px-6 py-2.5 rounded-lg font-medium transition-all ${activeFilter === 'priority'
-              ? 'bg-blue-600 text-white shadow-md'
-              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-              }`}
-          >
-            Priority
-          </button>
-        </div>
+
 
         {/* Patient Cards */}
         <div className="space-y-4">
@@ -158,9 +103,7 @@ export default function DoctorDashboardPage() {
                     <span>ID: {patient.displayId.toUpperCase()}</span>
                   </div>
                 </div>
-                <span className={`px-4 py-1.5 rounded-lg text-sm font-medium ${getStatusColor(patient.status)}`}>
-                  {getStatusLabel(patient.status)}
-                </span>
+
               </div>
             </div>
           ))}

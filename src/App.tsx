@@ -26,7 +26,7 @@ import DoctorHomeDashboard from './screens/DoctorHomeDashboard';
 import AddFamilyMemberScreen from './screens/AddFamilyMemberScreen';
 import SelectRelationshipScreen from './screens/SelectRelationshipScreen';
 import SelectStatusScreen from './screens/SelectStatusScreen';
-import MedicalNotesScreen from './screens/MedicalNotesScreen';
+import SelectSideScreen from './screens/SelectSideScreen';
 import PedigreeBuilderScreen from './screens/PedigreeBuilderScreen';
 import DeleteConfirmationScreen from './screens/DeleteConfirmationScreen';
 import SavePedigreeScreen from './screens/SavePedigreeScreen';
@@ -81,6 +81,8 @@ import PatientInheritanceReportScreen from './screens/PatientInheritanceReportSc
 import MyInheritanceAnalysisScreen from './screens/MyInheritanceAnalysisScreen';
 // Privacy and Security Screen
 import PrivacyConsentScreen from './screens/PrivacyConsentScreen';
+import PatientVisualAnalysisScreen from './screens/PatientVisualAnalysisScreen';
+
 
 export default function App() {
   return (
@@ -106,8 +108,8 @@ export default function App() {
             <Route path="/family-overview" element={<FamilyOverviewPage />} />
             <Route path="/add-family-member" element={<AddFamilyMemberScreen />} />
             <Route path="/select-relationship" element={<SelectRelationshipScreen />} />
+            <Route path="/select-side" element={<SelectSideScreen />} />
             <Route path="/select-status" element={<SelectStatusScreen />} />
-            <Route path="/medical-notes" element={<MedicalNotesScreen />} />
             <Route path="/pedigree-builder" element={<PedigreeBuilderPage />} />
             <Route path="/delete-confirmation/:id" element={<DeleteConfirmationScreen />} />
             <Route path="/save-pedigree" element={<SavePedigreeScreen />} />
@@ -149,6 +151,8 @@ export default function App() {
             <Route path="/doctor-settings" element={<DoctorSettingsScreen />} />
             <Route path="/inheritance-analysis" element={<InheritanceAnalysisScreen />} />
             <Route path="/my-inheritance-analysis" element={<MyInheritanceAnalysisScreen />} />
+            <Route path="/my-pedigree-chart" element={<PatientVisualAnalysisScreen />} />
+
             <Route path="/dashboard-selection" element={<DashboardSelectionScreen />} />
             <Route path="/all-screens" element={<AllScreensDashboard />} />
             <Route path="/all-screens-dashboard" element={<AllScreensDashboard />} />

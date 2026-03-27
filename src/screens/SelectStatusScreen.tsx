@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
-import { Activity, Check } from 'lucide-react';
+import { Activity, Check, Loader2 } from 'lucide-react';
 import { useNavigate } from 'react-router';
 import { DesktopLayout } from '../components/DesktopLayout';
 import { Button } from '../components/Button';
 import { useAppContext } from '../context/AppContext';
+import { API_BASE_URL } from '../config';
 
 export default function SelectStatusScreen() {
   const navigate = useNavigate();
-  const { tempMemberData, setTempMemberData, familyMembers, setFamilyMembers } = useAppContext();
+  const { tempMemberData, setTempMemberData } = useAppContext();
   const [selected, setSelected] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const statuses = [
     {
@@ -37,9 +40,63 @@ export default function SelectStatusScreen() {
     },
   ];
 
-  const handleSave = () => {
-    setTempMemberData({ ...tempMemberData, health_status: selected });
-    navigate('/medical-notes');
+  const handleSave = async () => {
+    setLoading(true);
+    setError('');
+
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) throw new Error("No token found. Please log in again.");
+
+      // Step 1: Create Basic Info
+      const createRes = await fetch(`${API_BASE_URL}/api/patient/family-members/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Token ${token}`
+        },
+        body: JSON.stringify({
+          full_name: tempMemberData.name,
+          gender: tempMemberData.gender === 'male' ? 'Male' : tempMemberData.gender === 'female' ? 'Female' : 'Other',
+          age: parseInt((tempMemberData.age as any) || '0', 10)
+        })
+      });
+
+      const createData = await createRes.json();
+      if (!createData.status) {
+        throw new Error(createData.message || JSON.stringify(createData.errors) || 'Failed to create family member profile');
+      }
+
+      const memberId = createData.member.id;
+
+      // Step 2: Update Relationship and Status
+      const updateRes = await fetch(`${API_BASE_URL}/api/patient/family-members/${memberId}/`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Token ${token}`
+        },
+        body: JSON.stringify({
+          relationship: tempMemberData.relationship ? tempMemberData.relationship.charAt(0).toUpperCase() + tempMemberData.relationship.slice(1) : 'Other Relative',
+          health_status: selected.charAt(0).toUpperCase() + selected.slice(1),
+          side_of_family: tempMemberData.side_of_family || 'None',
+          medical_notes: '' // No longer collecting notes
+        })
+      });
+
+      const updateData = await updateRes.json();
+      if (!updateData.status) {
+        console.warn("Update may have failed partially:", updateData.errors);
+      }
+
+      setTempMemberData({});
+      navigate('/family-overview');
+    } catch (err: any) {
+      console.error(err);
+      setError(err.message || "An error occurred while saving.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const colorClasses = {
@@ -62,15 +119,22 @@ export default function SelectStatusScreen() {
             </p>
           </div>
 
+          {error && (
+            <div className="mb-6 p-4 bg-red-50 text-red-600 rounded-lg border border-red-200">
+              {error}
+            </div>
+          )}
+
           <div className="space-y-4 mb-8">
             {statuses.map((status) => (
               <button
                 key={status.id}
                 onClick={() => setSelected(status.id)}
+                disabled={loading}
                 className={`w-full p-6 rounded-xl border-2 transition-all text-left ${selected === status.id
                     ? colorClasses[status.color as keyof typeof colorClasses] + ' shadow-md'
                     : 'border-gray-200 bg-white hover:border-gray-400 hover:shadow-sm'
-                  }`}
+                  } ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
@@ -92,12 +156,13 @@ export default function SelectStatusScreen() {
           <div className="flex gap-3">
             <button
               onClick={() => navigate('/select-relationship')}
-              className="px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg hover:border-gray-400 font-semibold transition-all"
+              disabled={loading}
+              className="px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-lg hover:border-gray-400 font-semibold transition-all disabled:opacity-50"
             >
               Back
             </button>
-            <Button onClick={handleSave} fullWidth disabled={!selected}>
-              Save and Continue
+            <Button onClick={handleSave} fullWidth disabled={!selected || loading} icon={loading ? <Loader2 size={20} className="animate-spin" /> : undefined}>
+              {loading ? 'Saving member...' : 'Save and Complete'}
             </Button>
           </div>
         </div>
