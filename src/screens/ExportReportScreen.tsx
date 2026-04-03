@@ -60,7 +60,7 @@ export default function ExportReportScreen() {
     try {
       if (method === 'download' || method === 'print') {
         const token = localStorage.getItem('token');
-        let url = 'https://c5tkvglx-8000.inc1.devtunnels.ms/api/reports/download/';
+        let url = `${API_BASE_URL}/api/reports/download/`;
         const params = new URLSearchParams();
         if (patientId) params.append('patient_id', patientId);
         if (analysisId) params.append('analysis_id', analysisId);

@@ -1,8 +1,8 @@
 const fs = require('fs');
 const path = require('path');
 
-const OLD_URL = "https://c5tkvglx-8000.inc1.devtunnels.ms/api/";
-const NEW_URL = "http://127.0.0.1:8000/api/";
+const OLD_URL = "https://c5tkvglx-8000.inc1.devtunnels.ms";
+const NEW_URL = "http://180.235.121.245:8008";
 
 function processDirectory(dirPath) {
     const entries = fs.readdirSync(dirPath, { withFileTypes: true });
